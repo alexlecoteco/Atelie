@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8123:8123"
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    stdin_open: true
+    tty: true
+#    command: php -S 0.0.0.0:8000 -t /var/www
