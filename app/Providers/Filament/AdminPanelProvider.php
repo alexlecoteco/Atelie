@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\Products\Pages\ListProducts;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -20,39 +19,42 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class ShowcasePanelProvider extends PanelProvider
+class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('showcase')
-            ->path('showcase')
+            ->default()
+            ->id('admin')
+            ->path('main')
+            ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Red,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
-//                ListProducts::class,
+                Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Showcase/Widgets'), for: 'App\Filament\Showcase\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-//                AccountWidget::class,
+                AccountWidget::class,
 //                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-//                AuthenticateSession::class,
+                AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->globalSearch(false)
+            ->authMiddleware([
+                Authenticate::class,
             ]);
-//            ->authMiddleware([
-//                Authenticate::class,
-//            ]);
     }
 }
